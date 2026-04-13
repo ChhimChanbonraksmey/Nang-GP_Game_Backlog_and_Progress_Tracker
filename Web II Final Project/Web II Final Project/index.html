@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Backlog and Progress Tracker</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- =========================
+       PAGE HEADER
+  ========================== -->
+  <header class="site-header">
+    <div class="container header-content">
+      <div>
+        <p class="eyebrow">INFO 251 Final Project</p>
+
+        <div class="title-row">
+          <span class="title-icon" aria-hidden="true">
+            <img src="assets/images/game_tracker.jpg" alt="" class="title-icon-image" />
+          </span>
+
+          <h1>Game Backlog and Progress Tracker</h1>
+        </div>
+
+        <p class="hero-text">
+          Search real games, save them to your library, and track your progress.
+        </p>
+      </div>
+
+      <div class="api-status-panel">
+        <div class="api-status-card">
+          <span class="status-dot" id="rawgStatusDot"></span>
+          <div>
+            <p class="status-title">RAWG API</p>
+            <p class="status-text" id="rawgStatusText">Not checked</p>
+          </div>
+        </div>
+
+        <div class="api-status-card">
+          <span class="status-dot" id="mockoonStatusDot"></span>
+          <div>
+            <p class="status-title">Mockoon API</p>
+            <p class="status-text" id="mockoonStatusText">Not checked</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- =========================
+         GLOBAL MESSAGE AREA
+    ========================== -->
+    <section class="message-section glass-section">
+      <p id="messageBox" class="message-box" aria-live="polite"></p>
+    </section>
+
+    <!-- =========================
+         RAWG SEARCH SECTION
+    ========================== -->
+    <section class="search-section glass-section">
+      <div class="section-header">
+        <div>
+          <h2>Search Games</h2>
+          <p class="section-subtext">
+            Search real games using RAWG, then add them to your library.
+          </p>
+        </div>
+        <span class="section-badge" id="searchResultsCount">0 results</span>
+      </div>
+
+      <form id="searchForm" class="search-form">
+        <div class="search-row">
+          <div class="form-group grow">
+            <label for="searchQuery">Game Title</label>
+            <input type="text" id="searchQuery" placeholder="Search for a game..." />
+          </div>
+
+          <div class="form-group small">
+            <label for="searchPageSize">Results</label>
+            <select id="searchPageSize">
+              <option value="6">6</option>
+              <option value="9" selected>9</option>
+              <option value="12">12</option>
+            </select>
+          </div>
+
+          <div class="search-actions">
+            <button type="submit" id="searchBtn" class="btn btn-primary">Search</button>
+            <button type="button" id="clearSearchBtn" class="btn btn-secondary">Clear</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="rawg-attribution">
+        Game data powered by RAWG.
+      </div>
+
+      <div id="searchResultsContainer" class="games-grid"></div>
+    </section>
+
+    <!-- =========================
+         QUICK ADD CUSTOM GAME
+    ========================== -->
+    <section class="quick-add-section glass-section">
+      <div class="section-header">
+        <div>
+          <h2>Quick Add Custom Game</h2>
+          <p class="section-subtext">
+            Add a game manually if it does not appear in search results.
+          </p>
+        </div>
+      </div>
+
+      <form id="quickAddForm" novalidate>
+        <div class="quick-add-grid">
+          <div class="form-group">
+            <label for="quickTitle">Game Title</label>
+            <input type="text" id="quickTitle" placeholder="Enter game title..." />
+            <small id="quickTitleError" class="error-message"></small>
+          </div>
+
+          <div class="form-group">
+            <label for="quickCover">Cover Image URL</label>
+            <input type="text" id="quickCover" placeholder="https://example.com/game-cover.jpg" />
+            <small id="quickCoverError" class="error-message"></small>
+          </div>
+
+          <div class="form-group">
+            <label for="quickStatus">Status</label>
+            <select id="quickStatus">
+              <option value="">Select status</option>
+              <option value="Want to Play">Want to Play</option>
+              <option value="Playing">Playing</option>
+              <option value="Completed">Completed</option>
+              <option value="Want to Replay">Want to Replay</option>
+            </select>
+            <small id="quickStatusError" class="error-message"></small>
+          </div>
+
+          <div class="form-group">
+            <label for="quickPlatform">Platform</label>
+            <select id="quickPlatform">
+              <option value="">Select platform</option>
+              <option value="PC">PC</option>
+              <option value="PlayStation">PlayStation</option>
+              <option value="Xbox">Xbox</option>
+              <option value="Switch">Switch</option>
+              <option value="Mobile">Mobile</option>
+              <option value="Other">Other</option>
+            </select>
+            <small id="quickPlatformError" class="error-message"></small>
+          </div>
+
+          <div class="form-group">
+            <label for="quickPriority">Priority</label>
+            <select id="quickPriority">
+              <option value="">Select priority</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+            <small id="quickPriorityError" class="error-message"></small>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="quickFavorite" />
+              <span>Mark as Favorite</span>
+            </label>
+          </div>
+
+          <div class="form-group quick-add-full">
+            <label for="quickNotes">Notes</label>
+            <textarea id="quickNotes" rows="3" maxlength="180" placeholder="Optional notes about the game..."></textarea>
+            <div class="field-footer">
+              <small class="error-message" id="quickNotesError"></small>
+              <small class="char-counter" id="quickNotesCounter">0 / 180</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="quickAddBtn" class="btn btn-primary">Add Custom Game</button>
+          <button type="button" id="quickAddResetBtn" class="btn btn-secondary">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- =========================
+         DASHBOARD SECTION
+    ========================== -->
+    <section class="dashboard-section glass-section">
+      <div class="section-header">
+        <div>
+          <h2>Progress Dashboard</h2>
+          <p class="section-subtext">Track your backlog and completion progress.</p>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <article class="dashboard-card">
+          <h3>Total Games</h3>
+          <p id="totalGames">0</p>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Want to Play</h3>
+          <p id="wantToPlayCount">0</p>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Playing</h3>
+          <p id="playingCount">0</p>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Completed</h3>
+          <p id="completedCount">0</p>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Want to Replay</h3>
+          <p id="wantToReplayCount">0</p>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Favorites</h3>
+          <p id="favoriteCount">0</p>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>High Priority</h3>
+          <p id="highPriorityCount">0</p>
+        </article>
+      </div>
+
+      <div class="progress-wrapper">
+        <div class="progress-label-row">
+          <span>Completion Progress</span>
+          <span id="progressText">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         LIBRARY CONTROLS
+    ========================== -->
+    <section class="controls-section glass-section">
+      <div class="section-header">
+        <div>
+          <h2>Library Controls</h2>
+          <p class="section-subtext">Filter, sort, and search your saved library.</p>
+        </div>
+      </div>
+
+      <div class="controls-grid controls-grid-expanded">
+        <div class="form-group">
+          <label for="filterStatus">Filter by Status</label>
+          <select id="filterStatus">
+            <option value="all">All Statuses</option>
+            <option value="Want to Play">Want to Play</option>
+            <option value="Playing">Playing</option>
+            <option value="Completed">Completed</option>
+            <option value="Want to Replay">Want to Replay</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="filterPriority">Filter by Priority</label>
+          <select id="filterPriority">
+            <option value="all">All Priorities</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="filterPlatform">Filter by Platform</label>
+          <select id="filterPlatform">
+            <option value="all">All Platforms</option>
+            <option value="PC">PC</option>
+            <option value="PlayStation">PlayStation</option>
+            <option value="Xbox">Xbox</option>
+            <option value="Switch">Switch</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="favoriteOnly">Favorites Only</label>
+          <select id="favoriteOnly">
+            <option value="all">All Games</option>
+            <option value="true">Favorites Only</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="sortOption">Sort By</label>
+          <select id="sortOption">
+            <option value="default">Default</option>
+            <option value="title-asc">Title A-Z</option>
+            <option value="title-desc">Title Z-A</option>
+            <option value="status">Status</option>
+            <option value="priority">Priority</option>
+            <option value="completed-date-desc">Latest Completion</option>
+            <option value="newest">Newest First</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="librarySearchInput">Search in Library</label>
+          <input type="text" id="librarySearchInput" placeholder="Search saved games..." />
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         SAVED GAME LIBRARY
+    ========================== -->
+    <section class="games-section glass-section">
+      <div class="section-header">
+        <div>
+          <h2>My Game Library</h2>
+          <p class="section-subtext">Your saved backlog lives here.</p>
+        </div>
+        <span class="section-badge" id="libraryCountBadge">0 games</span>
+      </div>
+
+      <div id="libraryContainer" class="games-grid"></div>
+    </section>
+  </main>
+
+  <!-- =========================
+       EDIT MODAL
+  ========================== -->
+  <div id="editModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Game</h2>
+        <button type="button" id="closeModalIconBtn" class="modal-close-btn" aria-label="Close modal">×</button>
+      </div>
+
+      <form id="editGameForm" novalidate>
+        <input type="hidden" id="editId" />
+
+        <div class="form-group">
+          <label for="editTitle">Game Title</label>
+          <input type="text" id="editTitle" />
+          <small id="editTitleError" class="error-message"></small>
+        </div>
+
+        <div class="form-group">
+          <label for="editCover">Cover Image URL</label>
+          <input type="text" id="editCover" />
+          <small id="editCoverError" class="error-message"></small>
+        </div>
+
+        <div class="form-group">
+          <label for="editStatus">Status</label>
+          <select id="editStatus">
+            <option value="Want to Play">Want to Play</option>
+            <option value="Playing">Playing</option>
+            <option value="Completed">Completed</option>
+            <option value="Want to Replay">Want to Replay</option>
+          </select>
+          <small id="editStatusError" class="error-message"></small>
+        </div>
+
+        <div class="form-group">
+          <label for="editPlatform">Platform</label>
+          <select id="editPlatform">
+            <option value="">Select platform</option>
+            <option value="PC">PC</option>
+            <option value="PlayStation">PlayStation</option>
+            <option value="Xbox">Xbox</option>
+            <option value="Switch">Switch</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Other">Other</option>
+          </select>
+          <small id="editPlatformError" class="error-message"></small>
+        </div>
+
+        <div class="form-group">
+          <label for="editPriority">Priority</label>
+          <select id="editPriority">
+            <option value="">Select priority</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+          <small id="editPriorityError" class="error-message"></small>
+        </div>
+
+        <div class="form-group">
+          <label for="editCompletedDate">Completion Date</label>
+          <input type="date" id="editCompletedDate" />
+          <small id="editCompletedDateError" class="error-message"></small>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="editFavorite" />
+            <span>Mark as Favorite</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="editNotes">Notes</label>
+          <textarea id="editNotes" rows="4" maxlength="180" placeholder="Add notes about the game..."></textarea>
+          <div class="field-footer">
+            <small class="error-message" id="editNotesError"></small>
+            <small class="char-counter" id="editNotesCounter">0 / 180</small>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" id="saveEditBtn" class="btn btn-primary">Save Changes</button>
+          <button type="button" id="closeModalBtn" class="btn btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/rawg-api.js"></script>
+  <script src="js/mockoon-api.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

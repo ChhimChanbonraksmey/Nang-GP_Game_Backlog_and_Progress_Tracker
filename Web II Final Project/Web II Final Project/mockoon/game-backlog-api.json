@@ -1,0 +1,102 @@
+{
+  "uuid": "e32e4104-76f0-47ed-87bb-a8a019919848",
+  "lastMigration": 33,
+  "name": "Game backlog api",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3000,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "24569240-4fa7-4efa-ac92-1641695ef81a",
+      "type": "crud",
+      "documentation": "",
+      "method": "",
+      "endpoint": "games",
+      "responses": [
+        {
+          "uuid": "110c994f-6e1c-4a50-afd6-01d2c696d8b3",
+          "body": "{}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "DATABUCKET",
+          "filePath": "",
+          "databucketID": "n9il",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "24569240-4fa7-4efa-ac92-1641695ef81a"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [
+    {
+      "uuid": "79893a7e-642a-4048-ac9f-0343a3a57e0f",
+      "id": "n9il",
+      "name": "games",
+      "documentation": "",
+      "value": "[\r\n  {\r\n    \"id\": 1,\r\n    \"title\": \"Elden Ring\",\r\n    \"cover\": \"https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.png\",\r\n    \"status\": \"Want to Play\",\r\n    \"notes\": \"\",\r\n    \"rawgId\": 326243,\r\n    \"platform\": \"PC\",\r\n    \"priority\": \"High\",\r\n    \"favorite\": true,\r\n    \"completedDate\": \"\",\r\n    \"released\": \"2022-02-25\",\r\n    \"genres\": [\"Action RPG\"],\r\n    \"rating\": 4.5\r\n  },\r\n  {\r\n    \"id\": 2,\r\n    \"title\": \"The Last of Us\",\r\n    \"cover\": \"https://images.igdb.com/igdb/image/upload/t_cover_big/co1r7f.png\",\r\n    \"status\": \"Playing\",\r\n    \"notes\": \"Currently progressing through the story.\",\r\n    \"rawgId\": 58175,\r\n    \"platform\": \"PlayStation\",\r\n    \"priority\": \"Medium\",\r\n    \"favorite\": false,\r\n    \"completedDate\": \"\",\r\n    \"released\": \"2013-06-14\",\r\n    \"genres\": [\"Action\", \"Adventure\"],\r\n    \"rating\": 4.4\r\n  },\r\n  {\r\n    \"id\": 3,\r\n    \"title\": \"Cyberpunk 2077\",\r\n    \"cover\": \"https://images.igdb.com/igdb/image/upload/t_cover_big/co7497.png\",\r\n    \"status\": \"Completed\",\r\n    \"notes\": \"Finished the main story.\",\r\n    \"rawgId\": 41494,\r\n    \"platform\": \"PC\",\r\n    \"priority\": \"Low\",\r\n    \"favorite\": true,\r\n    \"completedDate\": \"2025-08-20\",\r\n    \"released\": \"2020-12-10\",\r\n    \"genres\": [\"RPG\", \"Sci-Fi\"],\r\n    \"rating\": 4.0\r\n  }\r\n]"
+    }
+  ],
+  "callbacks": []
+}
