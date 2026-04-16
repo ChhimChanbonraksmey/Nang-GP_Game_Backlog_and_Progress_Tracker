@@ -320,6 +320,11 @@ textarea:focus {
   border-color: rgba(139, 92, 246, 0.8);
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(0.9);
+  cursor: pointer;
+}
+
 .error-message {
   color: #fca5a5;
   font-size: 0.85rem;
